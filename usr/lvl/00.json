@@ -1,0 +1,64 @@
+{
+	"info":{
+		"name": "start",
+		"version": 0.1
+	},
+	"obj":{
+		"ground":{
+			"geometry":{
+				"type": "basic",
+				"url": "/model/tesseract.json",
+				"arg": [100,20,100,100]
+			},
+			"hitbox":{
+				"shape": "tesseract",
+				"arg": [100,20,100,100]
+			},
+			"material":{
+				"color": "#ffffff"
+			},
+			"attributes":{
+				"position": [0,0,0,0],
+				"mass": 0,
+				"gravity": false,
+				"fixed": true,
+				"collision": true
+			}
+		},
+		"player1":{
+			"geometry":{
+				"type": "basic",
+				"url": "/model/tesseract.json",
+				"arg": [10,10,10,10]
+			},
+			"hitbox":{
+				"shape": "tesseract",
+				"arg": [10,10,10,10]
+			},
+			"material":{
+				"color": "#ffffff"
+			},
+			"attributes":{
+				"position": [0,50,0,0],
+				"mass": 1,
+				"gravity": true,
+				"fixed": false,
+				"collision": true
+			}
+		},
+		"gravitationCenter":{
+			"geometry":{
+				"type": "basic",
+				"url": "/model/tesseract.json",
+				"arg": [10,10,10,10]
+			},
+			"attributes":{
+				"position": [0,-100,0,0],
+				"mass": 1,
+				"gravity": true,
+				"fixed": true,
+				"collision": false
+			}
+		}
+	}
+}

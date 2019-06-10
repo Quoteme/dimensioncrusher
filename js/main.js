@@ -1,22 +1,33 @@
 var camera, scene, renderer;
-var mesh, geometry, material;
+var level, physicsList = [];
+
 init();
 animate();
-function init() {
+async function init() {
 	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.z = 400;
 	scene = new THREE.Scene();
 	// icosahedron
-	geometry = new THREE.IcosahedronBufferGeometry( 200, 1 );
-	material = new THREE.MeshBasicMaterial( { color: 0xffffff} );
-	moveTo4D(geometry, material);
-	mesh = new THREE.Mesh( geometry, material );
-	meshBindingsFor4D( mesh );
-	scene.add( mesh );
+//	geometry = new THREE.IcosahedronGeometry( 200, 1 );
+//	material = new THREE.MeshBasicMaterial( { color: 0xffffff} );
+//	mesh = new THREE.Mesh( geometry, material );
+//	moveTo4D(mesh, geometry, material);
+//	loadModel("model/tesseract.json").then((m)=>{
+//		mesh = m
+//		scene.add( mesh );
+//	});
+	// load a level
+	level = await loadLevel("usr/lvl/00.json");
+	scene.add(level[1]);
+	level[1].children.forEach(c=>physicsList.push(c));
 
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	// debugging / instagram stuff
+//		document.body.style.webkitTransform="rotate(-90deg)";
+		scene.background = new THREE.Color( 0x282828 );;
+	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	document.body.appendChild( renderer.domElement );
 	//
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -28,16 +39,20 @@ function onWindowResize() {
 }
 function animate() {
 	requestAnimationFrame( animate );
-	mesh.rotation.x += 0.005;
-	mesh.rotation.y += 0.01;
-
-geometry.applyMatrix([
-	[Math.cos(0.005),0,0,-Math.sin(0.005)],
-	[0,1,0,0],
-	[0,0,1,0],
-	[Math.sin(0.005),0,0,Math.cos(0.005)]
-]);
-mesh.updateVertexColor()
+//	mesh.rotation.x += 0.005;
+//	mesh.rotation.y += 0.01;
+	mesh = physicsList[1]
+	if(mesh !=undefined){
+		mesh.geometry.applyMatrix([
+			[Math.cos(0.05),0,0,-Math.sin(0.05)],
+			[0,1,0,0],
+			[0,0,1,0],
+			[Math.sin(0.05),0,0,Math.cos(0.05)]
+		]);
+		mesh.updateVertexColor();
+	}
+	// apply physics to every element in phyicslist relative to physicslist
+	physicsList.forEach( e=> e.physics.update(physicsList) );
 
 	renderer.render( scene, camera );
 }

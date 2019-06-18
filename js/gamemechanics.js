@@ -12,8 +12,8 @@ async function buildLevel (json){
 		let data = json.obj[keys[i]];
 		if(data.geometry!=undefined){
 			let obj = await buildOBJ(data)
-			obj.name = keys[i];
-			hyperphysics.addPhysics(obj,data.attributes.mass,data.attributes.fixed)
+			obj.name = obj.children[0].name = keys[i];
+			hyperphysics.addPhysics(obj.children[0],data.attributes.mass,data.attributes.fixed)
 			grp.add( obj );
 		}
 	}
@@ -21,11 +21,25 @@ async function buildLevel (json){
 }
 
 async function buildOBJ (data){
-	let out;
+	let grp = new THREE.Group();
+	let mesh, light;
 	if( data.geometry.type == "basic" ){
-		out = await loadModel(data.geometry.url)
-		out.geometry.chngSize(...data.geometry.arg);
-		out.setPosition(...data.attributes.position);
+		mesh = await loadModel(data.geometry.url)
+		mesh.material.color = new THREE.Color(data.material.color)
+		mesh.geometry.chngSize(...data.geometry.arg);
+		mesh.setPosition(...data.attributes.position);
+		grp.add( mesh );
 	}
-	return out;
+	if (data.attributes.light == true) {
+		light = new THREE.PointLight(
+			data.attributes.lightColor,
+			data.attributes.intensity,
+			data.attributes.distance
+		)
+		light.position.set(...data.attributes.position.splice(0,3));
+		grp.add( light );
+		let plh = new THREE.PointLightHelper( light, 20 );
+		grp.add(plh);
+	}
+	return grp;
 }

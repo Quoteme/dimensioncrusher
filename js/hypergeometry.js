@@ -105,8 +105,13 @@ const moveTo4D = (mesh, geo, mat, pos=(i)=>0)=>{
 	geo.updateVertexColor = (
 		// variable that allows for more easy change of the following function
 			base=0,
+			scale=1,
 		// color calculation function
-			fun=(x,y,z,w) => [ (base+w)/20, 1, 1-Math.abs(Math.tanh(x))/2] // H,S,L
+			fun=(x,y,z,w) => [
+				(base+w*scale)/8,
+				0.8,
+				1-Math.abs(Math.tanh(w))/2
+			] // H,S,L  1-Math.abs(Math.tanh(x))/2     Math.E**(-(((w/8)**2)))
 	)=> geo.faces.forEach( f=>{
 		// calculate the colors for each vertex in each face
 			f.vertexColors[0].setHSL(...fun(
@@ -155,7 +160,7 @@ const moveTo4D = (mesh, geo, mat, pos=(i)=>0)=>{
 			v.y = v.y*y;
 			v.z = v.z*z;
 		});
-		geo.omega.map( i=> i*w);
+		geo.omega = geo.omega.map( n => n*w);
 	}
 
 	mat.vertexColors = THREE.VertexColors;

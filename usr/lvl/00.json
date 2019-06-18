@@ -15,10 +15,31 @@
 				"arg": [100,20,100,100]
 			},
 			"material":{
-				"color": "#ffffff"
+				"color": "#00ff00"
 			},
 			"attributes":{
 				"position": [0,0,0,0],
+				"mass": 0,
+				"gravity": false,
+				"fixed": true,
+				"collision": true
+			}
+		},
+		"wall":{
+			"geometry":{
+				"type": "basic",
+				"url": "/model/tesseract.json",
+				"arg": [100,100,10,10]
+			},
+			"hitbox":{
+				"shape": "tesseract",
+				"arg": [100,100,10,10]
+			},
+			"material":{
+				"color": "#8800bb"
+			},
+			"attributes":{
+				"position": [0,20,30,0],
 				"mass": 0,
 				"gravity": false,
 				"fixed": true,
@@ -39,7 +60,7 @@
 				"color": "#ffffff"
 			},
 			"attributes":{
-				"position": [0,50,0,0],
+				"position": [20,50,50,0],
 				"mass": 1,
 				"gravity": true,
 				"fixed": false,
@@ -52,12 +73,36 @@
 				"url": "/model/tesseract.json",
 				"arg": [10,10,10,10]
 			},
+			"material":{
+				"color": "#ffffff"
+			},
 			"attributes":{
-				"position": [0,-100,0,0],
-				"mass": 1,
+				"position": [50,-1000,0,0],
+				"mass": 30,
 				"gravity": true,
 				"fixed": true,
 				"collision": false
+			}
+		},
+		"light":{
+			"geometry":{
+				"type": "basic",
+				"url": "/model/tesseract.json",
+				"arg": [10,10,10,10]
+			},
+			"material":{
+				"color": "#ffffff"
+			},
+			"attributes":{
+				"position": [50,200,0,0],
+				"mass": 0,
+				"gravity": false,
+				"fixed": true,
+				"collision": false,
+				"light": true,
+					"lightColor": "#ffffff",
+					"intensity": 10,
+					"distance": 100
 			}
 		}
 	}

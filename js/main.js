@@ -1,5 +1,6 @@
 var camera, scene, renderer;
 var level, physicsList = [];
+var controls, keyboard;
 
 init();
 animate();
@@ -19,15 +20,16 @@ async function init() {
 	// load a level
 	level = await loadLevel("usr/lvl/00.json");
 	scene.add(level[1]);
-	level[1].children.forEach(c=>physicsList.push(c));
+	level[1].children.forEach(c=>physicsList.push(c.children[0]));
 
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	// debugging / instagram stuff
 //		document.body.style.webkitTransform="rotate(-90deg)";
-		scene.background = new THREE.Color( 0x282828 );;
+//		scene.background = new THREE.Color( 0x282828 );
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
+	controls.enableKeys = false;
 	document.body.appendChild( renderer.domElement );
 	//
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -41,16 +43,19 @@ function animate() {
 	requestAnimationFrame( animate );
 //	mesh.rotation.x += 0.005;
 //	mesh.rotation.y += 0.01;
-	mesh = physicsList[1]
-	if(mesh !=undefined){
-		mesh.geometry.applyMatrix([
-			[Math.cos(0.05),0,0,-Math.sin(0.05)],
-			[0,1,0,0],
-			[0,0,1,0],
-			[Math.sin(0.05),0,0,Math.cos(0.05)]
-		]);
-		mesh.updateVertexColor();
-	}
+	mesh = physicsList.filter(x=>x.name=="player1")[0];
+//	if(mesh !=undefined){
+//		mesh.geometry.applyMatrix([
+//			[Math.cos(0.05),0,0,-Math.sin(0.05)],
+//			[0,1,0,0],
+//			[0,0,1,0],
+//			[Math.sin(0.05),0,0,Math.cos(0.05)]
+//		]);
+//		mesh.updateVertexColor();
+//	}
+
+	keyboardUpdate(mesh);
+
 	// apply physics to every element in phyicslist relative to physicslist
 	physicsList.forEach( e=> e.physics.update(physicsList) );
 
